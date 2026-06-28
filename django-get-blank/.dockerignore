@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.git/
+.gitignore
+.idea/
+.vscode/
+venv/
+.env
+db.sqlite3
+media/blanks_download_img/
+media/blanks_download/
+README.md

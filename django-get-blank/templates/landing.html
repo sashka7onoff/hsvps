@@ -1,0 +1,287 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="{{ seo_description }}">
+    <meta name="keywords" content="{{ seo_keywords }}">
+    <title>{{ seo_title }}</title>
+    <link rel="stylesheet" href="{% static 'css/additions.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/hamburgers.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.fancybox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date(); for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }} k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(93425518, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+    </script>
+</head>
+<body>
+<header class="header">
+    <div class="container h-100">
+        <div class="row align-items-center h-100">
+            <button class="hamburger hamburger--slider" type="button">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
+            <div class="adaptive-menu">
+                <div class="x-mobile">
+                    <a href="{% url 'login' %}" class="info_user" style="margin-bottom: 20px;">
+                        <div class="signin d-flex align-items-center justify-content-end">
+                            <div class="signin__user d-flex">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.3333 14V12.6667C13.3333 11.9594 13.0524 11.2811 12.5523 10.781C12.0522 10.281 11.3739 10 10.6667 10H5.33334C4.62609 10 3.94782 10.281 3.44772 10.781C2.94762 11.2811 2.66667 11.9594 2.66667 12.6667V14" stroke="#C8CED4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M7.99999 7.33333C9.47275 7.33333 10.6667 6.13943 10.6667 4.66667C10.6667 3.19391 9.47275 2 7.99999 2C6.52724 2 5.33333 3.19391 5.33333 4.66667C5.33333 6.13943 6.52724 7.33333 7.99999 7.33333Z" stroke="#C8CED4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                            Войти
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 h-100">
+                <div class="d-flex h-100">
+                    <a href="/" class="d-flex align-items-center">
+                        <img src="{% static 'img/logo.png' %}" alt="" style="height: 32px;">
+                        <span class="logo_txt">GET-BLANK<span style="color: #ffdf54;">.</span></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-xl-7 h-100">
+                <div class="d-flex h-100">
+                    <nav class="d-flex align-items-center">
+                        <ul class="menu d-flex">
+                            <li class="menu__item"><a href="/#for_who" class="menu__link">Для кого?</a></li>
+                            <li class="menu__item">
+                                <a href="#how_it_work" class="menu__link">Как работает?</a>
+                            </li>
+                            <li class="menu__item">
+                                <a target="_blank" href="https://chrome.google.com/webstore/detail/get-blank/eejkjiooncmfgejaiolpmlahgipmbecn?hl=ru" class="menu__link">Установить расширение</a>
+                            </li>
+                            <li class="/#tariff">
+                                <a href="/#tariff" class="menu__link">Тариф</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="col-xl-1 ml-auto">
+                <a href="{% url 'login' %}" style="text-decoration: none">
+                    <div class="signin d-flex align-items-center justify-content-end">
+                        <div class="signin__user d-flex">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.3333 14V12.6667C13.3333 11.9594 13.0524 11.2811 12.5523 10.781C12.0522 10.281 11.3739 10 10.6667 10H5.33334C4.62609 10 3.94782 10.281 3.44772 10.781C2.94762 11.2811 2.66667 11.9594 2.66667 12.6667V14" stroke="#C8CED4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M7.99999 7.33333C9.47275 7.33333 10.6667 6.13943 10.6667 4.66667C10.6667 3.19391 9.47275 2 7.99999 2C6.52724 2 5.33333 3.19391 5.33333 4.66667C5.33333 6.13943 6.52724 7.33333 7.99999 7.33333Z" stroke="#C8CED4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        Войти
+                    </div>
+                </a>
+            </div>
+            <div class="col-xl-1 ml-auto">
+                <a href="{% url 'registration' %}" style="text-decoration: none">
+                    <div class="signin d-flex align-items-center justify-content-end">Регистрация</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main">
+    <div class="aside" style="padding: 83px 0; background-color: rgb(255, 251, 239);">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12" style="display: flex; justify-content: space-between; flex-wrap: wrap">
+                    <div>
+                        <h1 class="aside__title">Автоматическое заполнение<br>любых Excel бланков</h1>
+                        <p class="aside__subtitle">Заполняйте бланки Ваших посредников<br>так же быстро, легко и удобно как кладете товары в корзину</p>
+                        <div class="slider_item_btns d-none d-sm-block">
+                            <a href="{% url 'registration' %}?promocode=SPRING300" style="text-decoration: none;">
+                                <button class="aside__btn slider_reg_button">Зарегистрироваться и получить бонус - 300 руб!</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="position: relative;">
+                        <img src="{% static 'img/laptop.png' %}" style="position: absolute;top: -28px;left: -106px;height: 472px;width: 898px;" class="mobile-hide">
+                        <video controls height="386" autoplay loop muted id="promo_video">
+                            <source src="{% static 'video/promo.mp4' %}" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="products">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <h3 class="rate__title" style="margin-bottom: 40px;" id="for_who">Для кого этот <span>сервис?</span></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <span class="products-item-link">
+                        <div class="products-item d-flex align-items-center">
+                            <div class="col-lg-8 col-md-8">
+                                <h1 class="products-item__title">Для бизнеса</h1>
+                                <p class="products-item__text">Для предпринимателей, которые заказывают товар оптом из Китая с сайтов: 1688.com и Taobao.com</p>
+                            </div>
+                            <div class="col-lg-4 col-md-4" style="text-align: center; height: 172px; display: flex;align-items: center;justify-content: space-around;">
+                                <img alt="" class="products-item__img" src="{% static 'img/bussiness.jpg' %}">
+                            </div>
+                        </div>
+                    </span>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <span class="products-item-link">
+                        <div class="products-item d-flex align-items-center">
+                            <div class="col-lg-8 col-md-8">
+                                <h1 class="products-item__title">Для личных покупок</h1>
+                                <p class="products-item__text">Для всех кто заказывает товары в Китае для себя через посредников на сайтах: Taobao.com и Tmall.com</p>
+                            </div>
+                            <div class="col-lg-4 col-md-4" style="text-align: center; height: 172px; display: flex;align-items: center;justify-content: space-around;">
+                                <img alt="" class="products-item__img" src="{% static 'img/personal.jpg' %}">
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products" style="background-color: #fafafa;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <h3 class="rate__title" style="margin-bottom: 40px;" id="how_it_work">Как это <span>работает?</span></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <a href="https://chrome.google.com/webstore/detail/get-blank/eejkjiooncmfgejaiolpmlahgipmbecn?hl=ru" target="_blank" class="products-item-link">
+                        <div class="products-item d-flex align-items-center">
+                            <div class="col-lg-8 col-md-8">
+                                <h1 class="products-item__title"><span class="how_work_number">1</span>Установите расширение для Браузера
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="display: inline-block; height: 15px; padding-left: 3px; vertical-align: baseline;"><path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z"></path></svg></h1>
+                                <p class="products-item__text">На страницах товаров 1688.com, Taobao и Tmall появится кнопка "Добавить в корзину GET-BLANK"</p>
+                            </div>
+                            <div class="col-lg-4 col-md-4" style="text-align: center;">
+                                <img alt="" class="products-item__img" src="{% static 'img/browser_extension.png' %}">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <span class="products-item-link">
+                        <div class="products-item d-flex align-items-center">
+                            <div class="col-lg-8 col-md-8">
+                                <h1 class="products-item__title"><span class="how_work_number">2</span>Добавляйте товары в корзину сервиса одной кнопкой</h1>
+                                <p class="products-item__text">Выберите цвет/размер/количество на странице товара и нажмите кнопуку "Добавить в GET-BLANK"</p>
+                            </div>
+                            <div class="col-lg-4 col-md-4" style="text-align: center;">
+                                <img alt="" class="products-item__img" src="{% static 'img/add_to_cart_button.png' %}">
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <span class="products-item-link">
+                        <div class="products-item d-flex align-items-center">
+                            <div class="col-lg-8 col-md-8">
+                                <h1 class="products-item__title"><span class="how_work_number">3</span>Загрузите Excel Файл вашего посредника</h1>
+                                <p class="products-item__text">В который собираетесь добавить товары</p>
+                            </div>
+                            <div class="col-lg-4 col-md-4" style="text-align: center;">
+                                <img alt="" class="products-item__img" src="{% static 'img/xlsx_upload.png' %}">
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <span class="products-item-link">
+                        <div class="products-item d-flex align-items-center">
+                            <div class="col-lg-8 col-md-8">
+                                <h1 class="products-item__title"><span class="how_work_number">4</span>Скачайте заполненный Excel файл</h1>
+                                <p class="products-item__text">Перейдите в корзину сервиса и нажмите кнопку "Скачать бланк"</p>
+                            </div>
+                            <div class="col-lg-4 col-md-4" style="text-align: center;">
+                                <img alt="" class="products-item__img" src="{% static 'img/xlsx_download.png' %}">
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tariffs" id="tariff">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <h3 class="rate__title mypt40" style="margin-bottom: 40px;">Сколько <span>стоит?</span></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <p style="font-size: 22px; padding-bottom: 30px;">В сервисе GET-BLANK действует единый тариф: 5 руб. за заполнение 1 позиции в бланке.</p>
+                    <p style="padding-bottom: 15px; line-height: 20px;">Стоимость не зависит от количества единиц (штук) на позицию, только от количества позиций.</p>
+                    <p style="padding-bottom: 15px; line-height: 20px;">То есть, к примеру, если Вы совершаете покупки для себя на Taobao или Tmall, и заказываете 7 разных товаров, то стоимость автоматического заполнения Вашего бланка составит 35 руб.</p>
+                    <p style="padding-bottom: 15px; line-height: 20px;">Если вы предприниматель, и делаете регулярные небольшие поставки с площадок 1688.com или Taobao, то автоматически сгенерированный бланк, допустим, на 60 позиций будет стоить 300 руб.</p>
+                    <p style="padding-bottom: 15px; line-height: 20px;">Если в вашем магазине большой ассортимент, и в ваших поставках из Китая больше сотни позиций, которые отнимают у Вас или Ваших сотрудников несколько дней, с сервисом Get-blank Вы сможете просто складывать товары в корзину и получать бланк для Вашего посредника от 500 руб.</p>
+                    <p style="padding-bottom: 15px; line-height: 20px;">Сервис не требует подписки, нет никаких регулярных списаний. Оплата услуги производится с Вашего баланса при скачивании заполненного бланка. Баланс можно пополнить на любую сумму.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="" style="padding: 73px 0;background-color: #fafafa;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <h3 class="rate__title" style="margin-bottom: 40px;">Способы <span>оплаты</span></h3>
+                </div>
+            </div>
+            <div class="row pl-5 pr-5">
+                <div class="col-xl-12 d-flex flex-wrap align-items-center methods-wrapper">
+                    <div class="row justify-content-around w-100">
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-qiwi.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-visa.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-webmoney.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-mastercard.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-maestro.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-euroset.svg' %}" alt="" class=""></div>
+                    </div>
+                    <div class="row justify-content-around w-100">
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-alfa.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-binbank.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-yandex.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-vtb.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-tele2.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-svaznoy.svg' %}" alt="" class=""></div>
+                    </div>
+                    <div class="row w-50 mx-auto justify-content-around">
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-megafon.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-beeline.svg' %}" alt="" class=""></div>
+                        <div class="methods__img"><img src="{% static 'img/pay_way/method-mts.svg' %}" alt="" class="mr-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    <div class="clearfix"></div>
+</main>
+</body>
+</html>

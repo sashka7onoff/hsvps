@@ -1,0 +1,89 @@
+{% load static %}
+
+<header class="bg-white shadow">
+    <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8 flex flex-1 flex-wrap place-content-between">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+            Настройки бланка: <span class="font-normal">{{ blank.blank_filename_original }}</span>
+        </h1>
+        <div class="text-s font-normal w-full">Здесь вы можете настроить соответствие содержимого столбца с его индексом</div>
+    </div>
+</header>
+
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 main-content">
+    <table class="border-collapse w-full mt-6 table-auto shadow-md">
+        <tbody>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Имя листа (таблицы)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="sheet_name" type="text" value="{{ blank.target_sheet_name }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('sheet_name')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" id="cart_loader_sheet_name" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Ссылка (буквенный индекс столбца)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="link" oninput="this.value = this.value.toUpperCase();" type="text" value="{{ blank.link_index|slice:'1' }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('link')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Фото (буквенный индекс столбца)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="image" oninput="this.value = this.value.toUpperCase();" type="text" value="{{ blank.img_index|slice:'1' }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('image')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Цвет (буквенный индекс столбца)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="color" id="input_color" oninput="this.value = this.value.toUpperCase();" type="text" value="{{ blank.color_index|slice:'1' }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('color')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Размер (буквенный индекс столбца)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="size" id="input_size" oninput="this.value = this.value.toUpperCase();" type="text" value="{{ blank.size_index|slice:'1' }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('size')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Количество (буквенный индекс столбца)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="amount" oninput="this.value = this.value.toUpperCase();" type="text" value="{{ blank.amount_index|slice:'1' }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('amount')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Цена (буквенный индекс столбца)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="price" oninput="this.value = this.value.toUpperCase();" type="text" value="{{ blank.price_index|slice:'1' }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('price')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+            <tr class="even:bg-white odd:bg-slate-50">
+                <td class="w-1/3 border-b border-slate-100 p-4 pl-8 text-slate-500">Первая заполняемая строка (номер строки)</td>
+                <td class="border-b border-slate-100 p-4 pl-8 text-slate-500">
+                    <input name="first_row" oninput="this.value = this.value.toUpperCase();" type="text" value="{{ blank.caption_row_index|add:'1' }}" class="inline-block w-1/16 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span onclick="saveChange('first_row')" class="cursor-pointer inline-flex ml-4 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Сохранить</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512 512" class="ml-3 fill-green-600" style="display: none;"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                    <div style="vertical-align: middle; display: none;" class="lds-ripple-small"><div></div><div></div></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

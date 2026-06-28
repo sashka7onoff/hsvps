@@ -1,0 +1,131 @@
+{% load static %}
+{% load blank_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ seo_description }}">
+    <meta name="keywords" content="{{ seo_keywords }}">
+    <title>{{ seo_title }}</title>
+    <link rel="stylesheet" href="{% static 'css/sytle.css' %}">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date(); for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }} k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(93425518, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+    </script>
+</head>
+<body class="{% if view == 'login' or view == 'registration' %}bg-gray-100{% else %}antialiased font-sans bg-gray-200{% endif %}">
+
+<nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex h-16 items-center justify-between">
+            <div class="absolute inset-y-0 left-0 flex items-center hidden">
+                <button type="button" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <div class="flex flex-shrink-0 items-center">
+                    <a href="/"><img src="{% static 'img/logo.png' %}" alt="" style="height: 32px;"></a>
+                </div>
+                <div>
+                    <span class="logo_text">GET-BLANK</span>
+                </div>
+                <div>
+                    {% if user.is_authenticated %}
+                    <div class="flex space-x-4 ml-6">
+                        <a href="{% url 'cart' %}" class="{% if view == 'cart' or view == 'index' %}bg-gray-900 {% endif %}text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Корзина</a>
+                        <a href="{% url 'blanks' %}" class="{% if view == 'blanks' %}bg-gray-900 {% endif %}text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Мои Бланки</a>
+                        <a href="{% url 'profile' %}" class="{% if view == 'profile' %}bg-gray-900 {% endif %}text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Профиль</a>
+                        <a target="_blank" href="https://chrome.google.com/webstore/detail/get-blank/eejkjiooncmfgejaiolpmlahgipmbecn?hl=ru" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Установить расширение</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <a href="{% url 'balance' %}" class="bg-gray-700 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium mr-3">Баланс: {{ user.balance }} руб</a>
+                <a href="{% url 'profile' %}" class="px-3 py-2 rounded-md text-sm font-medium text-white">{{ user.login }}</a>
+
+                <div class="relative ml-3">
+                    <div>
+                        <button id="user_button" type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                            <span class="sr-only">Open user menu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="-150 -120 748 812" class="user-holder" style="width: 30px; height: 30px;">
+                                <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z" style="filter: invert(70%) sepia(19%) saturate(173%) hue-rotate(179deg) brightness(91%) contrast(84%);"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div id="profile_menu" style="display: none" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu">
+                        <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">Ваш профиль</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">Настройки</a>
+                        <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">Выйти</a>
+                    </div>
+                </div>
+                <button type="button" class="ml-3 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <span class="sr-only">View notifications</span>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                    </svg>
+                </button>
+            </div>
+            {% else %}
+            <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <a href="{% url 'login' %}" class="bg-gray-700 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Войти</a>
+                <a href="{% url 'registration' %}" class="ml-2 bg-gray-700 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Регистрация</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <header></header>
+
+    <div class="sm:hidden" id="mobile-menu">
+        <div class="space-y-1 px-2 pt-2 pb-3">
+            <a href="{% url 'cart' %}" class="bg-gray-900 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Корзина</a>
+            <a href="{% url 'blanks' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Мои Бланки</a>
+        </div>
+    </div>
+</nav>
+
+{% if view == 'cart' %}
+    {% include 'pages/cart.html' %}
+{% elif view == 'blanks' %}
+    {% include 'pages/blanks.html' %}
+{% elif view == 'configure' %}
+    {% include 'pages/configure.html' %}
+{% elif view == 'profile' %}
+    {% include 'pages/profile.html' %}
+{% elif view == 'balance' %}
+    {% include 'pages/balance.html' %}
+{% elif view == 'login' %}
+    {% include 'pages/login.html' %}
+{% elif view == 'registration' %}
+    {% include 'pages/registration.html' %}
+{% elif view == 'oferta' %}
+    {% include 'pages/oferta.html' %}
+{% endif %}
+
+<nav id="footer" class="bg-gray-800 mt-6 w-full">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex h-16 items-center justify-between" style="display: flex;">
+            <p class="text-slate-500">&copy; 2023 Get-Blank.ru. Все права защищены</p>
+            <p class="text-slate-500"><a class="text-slate-500" href="{% url 'oferta' %}">Публичная оферта</a></p>
+            <p class="text-slate-500">info@get-blank.ru</p>
+        </div>
+    </div>
+</nav>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

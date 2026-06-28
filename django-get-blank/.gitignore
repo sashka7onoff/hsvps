@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Django
+db.sqlite3
+staticfiles/
+media/blanks_download_img/
+media/blanks_download/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker
+.env
+
+# OS
+Thumbs.db
+.DS_Store

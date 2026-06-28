@@ -1,0 +1,110 @@
+{% load static %}
+
+<header class="bg-white shadow">
+    <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8 flex flex-1 flex-wrap place-content-between">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Профиль</h1>
+        <div class="text-s font-normal w-full">Здесь вы можете управлять своими бланками: добавлять, удалять и настраивать</div>
+    </div>
+</header>
+
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 main-content">
+    <div class="bg-white px-4 py-5 sm:p-6 mt-6 shadow-md">
+        <form action="{% url 'profile' %}" method="post" onsubmit="return checkForm()">
+            {% csrf_token %}
+            <div class="grid grid-cols-6 gap-6 mx-auto max-w-2xl">
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Имя</label>
+                    <input value="{{ user.name }}" type="text" name="first-name" id="first-name" autocomplete="given-name" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Фамилия</label>
+                    <input value="{{ user.last_name }}" type="text" name="last-name" id="last-name" autocomplete="family-name" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                    <input value="{{ user.email }}" type="text" name="email" id="email" autocomplete="given-name" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900" style="opacity: 0;">прл</label>
+                    <input disabled type="text" value="{% if user.mail_verified %}Email подтвержден{% else %}Email не подтвержден{% endif %}" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6" style="{% if user.mail_verified %}color: green;{% else %}color: red;{% endif %} background-color: #fff;">
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Логин</label>
+                    <input disabled value="{{ user.login }}" type="text" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                </div>
+
+                <div class="col-span-6 sm:col-span-3"></div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Пароль</label>
+                    <input disabled value="{{ user.password }}" type="password" id="password" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label class="block text-sm font-medium leading-6 text-gray-900" style="opacity: 0;">прл</label>
+                    <div onclick="showChangePassword()" class="px-16 text-white bg-blue-600 rounded-lg hover:bg-blue-900 cursor-pointer" style="position: relative; bottom: -8px; height: 36px; line-height: 36px; display: inline-block;">Изменить пароль</div>
+                </div>
+
+                <div class="col-span-6 sm:col-span-3 change_password">
+                    <label for="new_password" class="block text-sm font-medium leading-6 text-gray-900">Новый пароль</label>
+                    <input type="password" name="new_password" id="new_password" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
+                <div class="col-span-6 sm:col-span-3 change_password"></div>
+
+                <div class="col-span-6 sm:col-span-3 change_password">
+                    <label for="confirm_password" class="block text-sm font-medium leading-6 text-gray-900">Подтвердить пароль</label>
+                    <input type="password" name="confirm_password" id="confirm_password" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <span class="text-xs text-red-400 hidden" id="psw_not_match">Пароли не совпадают!</span>
+                </div>
+
+                <div class="col-span-6 sm:col-span-3 change_password"></div>
+
+                <div class="col-span-6">
+                    <label for="gender" class="block text-sm font-medium leading-6 text-gray-900">Пол</label>
+                    <select id="gender" name="gender" class="px-4 mt-2 block w-full rounded-md border-0 bg-white py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <option value="0"{% if user.gender == 0 %} selected{% endif %}>Не указан</option>
+                        <option value="1"{% if user.gender == 1 %} selected{% endif %}>Мужской</option>
+                        <option value="2"{% if user.gender == 2 %} selected{% endif %}>Женский</option>
+                    </select>
+                </div>
+
+                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                    <label for="b_day" class="block text-sm font-medium leading-6 text-gray-900">День рождения</label>
+                    <select id="b_day" name="b_day" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        {% for day in "12345678910111213141516171819202122232425262728293031" %}
+                        <option value="{{ day }}"{% if user.b_day|stringformat:"i" == day %} selected{% endif %}>{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                    <label class="block text-sm font-medium leading-6 text-gray-900" style="opacity: 0;">Месяц</label>
+                    <select id="b_month" name="b_month" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        {% for month_num, month_name in months.items %}
+                        <option value="{{ month_num }}"{% if user.b_month == month_num %} selected{% endif %}>{{ month_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                    <label class="block text-sm font-medium leading-6 text-gray-900" style="opacity: 0;">Год</label>
+                    <select id="b_year" name="b_year" class="px-4 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <option value="">Выберите год</option>
+                        {% for year in years %}
+                        <option value="{{ year }}"{% if user.b_year == year %} selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-span-6">
+                    <button type="submit" class="px-16 py-2 mt-6 mr-6 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Внести изменения</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

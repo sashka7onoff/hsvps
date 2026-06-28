@@ -1,0 +1,291 @@
+.change_password{
+    display: none;
+}
+
+.logo_text{
+    line-height: 32px;
+    margin-left: 10px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.lds-ripple {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.lds-ripple div {
+    position: absolute;
+    border: 4px solid #ccc;
+    opacity: 1;
+    border-radius: 50%;
+    animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+    animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+    0% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    4.9% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    5% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        top: 0px;
+        left: 0px;
+        width: 80px;
+        height: 80px;
+        opacity: 0;
+    }
+}
+
+
+
+.lds-ripple-small {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+.lds-ripple-small div {
+    position: absolute;
+    border: 2px solid #ccc;
+    opacity: 1;
+    border-radius: 50%;
+    animation: lds-ripple-small 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple-small div:nth-child(2) {
+    animation-delay: -0.5s;
+}
+@keyframes lds-ripple-small {
+    0% {
+        top: 20px;
+        left: 20px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    4.9% {
+        top: 20px;
+        left: 20px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    5% {
+        top: 20px;
+        left: 20px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        top: 0px;
+        left: 0px;
+        width: 40px;
+        height: 40px;
+        opacity: 0;
+    }
+}
+
+.point{
+    margin-bottom: 25px;
+}
+
+.oferta p{
+    padding: 3px 0
+}
+
+#add_file_button{
+    display: inline-block;
+    margin-top: 40px;
+    border: 4px solid #333;
+    border-radius: 20px;
+    border-style: dashed;
+    cursor: pointer;
+    -webkit-transition: all 200ms ease-in-out;
+    -moz-transition: all 200ms ease-in-out;
+    -ms-transition: all 200ms ease-in-out;
+    -o-transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
+}
+
+
+#add_file_button:hover{
+    border-style: solid;
+    background-color: #fafafa;
+}
+
+.main-content{
+    min-height: 780px;
+}
+
+.user-holder:hover > path{
+    filter: invert(99%) sepia(0%) saturate(3293%) hue-rotate(174deg) brightness(117%) contrast(100%);
+}
+
+.settings_dots svg{
+    display: inline !important;
+}
+
+
+.settings_dots{
+    display: inline-block;
+    border: 1px solid #ccc;
+    padding: 10px 5px;
+    margin: 0 20px 0 0;
+    background-color: #fff;
+    border-radius: 0 5px 5px 0;
+    border-left: 1px solid #f1eeee;
+    cursor: pointer;
+    position: relative;
+}
+
+.dot_options{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 10px 20px;
+    position: absolute;
+    top: 48px;
+    right: 0;
+    display: none;
+    z-index: 10;
+}
+
+#one {
+    --height-one: 100px; /* Пример высоты для блока one */
+}
+
+.dot_options > div{
+    padding: 0 5px;
+    cursor: pointer;
+}
+
+.dot_options > div:hover{
+    background-color: #f8f8f8;
+}
+
+.dot_options > div:hover:first-child{
+    background: none;
+}
+
+#transporetn_bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(66, 68, 90, 0.5);
+    z-index: 10;
+    -webkit-transition: all 300ms ease-in-out;
+    -moz-transition: all 300ms ease-in-out;
+    -ms-transition: all 300ms ease-in-out;
+    -o-transition: all 300ms ease-in-out;
+    transition: all 300ms ease-in-out;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+#new_name_modal, #re_name_modal{
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    position: relative;
+    display: none;
+}
+
+#new_name_modal input, #re_name_modal input{
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px 10px
+}
+
+#new_name_modal button, #re_name_modal button{
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: rgb(99 102 241);
+    color: #fff;
+    font-weight: bold;
+}
+
+#close_new_name_modal, #close_re_name_modal{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+#options_container, #move_container {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+}
+
+#move_container{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 27px 10px rgba(0,0,0,0.1);
+}
+
+#move_container select{
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.option{
+    margin: 0 10px;
+    background-color: #2563eb;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 10px 27px 10px rgba(0,0,0,0.1);
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.amount_product{
+    width: 56px;
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.change_amount_button{
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    width: 28px;
+    text-align: center;
+    background-color: #ffffff;
+    cursor: pointer;
+}

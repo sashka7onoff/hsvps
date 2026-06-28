@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.python-version
+.mypy_cache/
+.pytest_cache/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+venv.bak/
+Lib/
+Scripts/
+include/
+pyvenv.cfg
+
+# IDE
+.idea/
+.vs/
+.vscode/
+*.swp
+*.swo
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+/media/
+
+# Environment variables (secrets)
+.env
+.env.*
+
+# SQL dumps with real data
+*_dump.sql
+
+# Logs
+*.log
+
+# Archives
+*.zip
+*.tar
+*.gz
+*.rar
+
+# Backup files
+*.bac
+*.bak
+*.backup.*
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Project-specific
+ht.zip
+minitest.py
+session
+logs_compose.txt
+
+# large file
+*.mp4

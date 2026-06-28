@@ -1,0 +1,196 @@
+{% load static %}
+{% load blank_tags %}
+
+{% if current_cart %}
+<div id="transporetn_bg">
+    <div id="new_name_modal">
+        <span id="close_new_name_modal" onclick="closeNewNameModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+        </span>
+        <form id="new_list_form">
+            {% csrf_token %}
+            <p style="margin-bottom: 10px">Название списка:</p>
+            <input type="text" placeholder="Новый список" name="new_list_name" id="new_list_name_input">
+            <button type="button" onclick="createNewList()">Сохранить</button>
+        </form>
+    </div>
+
+    <div id="re_name_modal">
+        <span id="close_re_name_modal" onclick="closeReNameModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+        </span>
+        <form id="rename_list_form">
+            {% csrf_token %}
+            <p style="margin-bottom: 10px">Название списка:</p>
+            <input type="text" placeholder="Новое название" name="new_list_name" id="rename_list_name_input">
+            <input type="hidden" id="rename_cart_id" value="">
+            <button type="button" onclick="renameList()">Сохранить</button>
+        </form>
+    </div>
+</div>
+
+<header class="bg-white shadow">
+    <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8 flex flex-1 flex-wrap place-content-between">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Корзина GET-BLANK</h1>
+        <button type="submit" class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" id="add_new_list">Добавить список +</button>
+        <div class="text-s font-normal w-full">Здесь вы можете управлять товарами в корзине и скачать заполненный бланк</div>
+    </div>
+</header>
+
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8" style="padding-top: 25px;">
+    <span style="font-weight: bold; padding-right: 20px;">Мои списки:</span>
+    {% for cart in carts %}
+    <div class="list_wrapper" style="display: inline-block;">
+        <span class="" style="display: block; float: left; border: 1px solid #ccc; padding: 10px 20px; margin: 0; background-color: #fff; border-radius: 5px 0 0 5px; border-right: 0; margin-bottom: 5px; cursor: pointer;{% if cart.id == current_cart.id %} background-color: #ffdf54; font-weight: bold; color: #333;{% endif %}" id="{{ cart.id }}">
+            <a href="{% url 'cart' %}?cart_id={{ cart.id }}">{{ cart.name }}</a>
+        </span>
+        <span class="settings_dots" onclick="showDotOptions({{ cart.id }})">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 128 512"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
+            <div class="dot_options" id="dot_options_{{ cart.id }}">
+                <div style="text-align: right; position: absolute; top: 2px; right: 2px;">
+                    <span onclick="closeDotOptions({{ cart.id }}, event)">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                    </span>
+                </div>
+                <div onclick="showRenameModal({{ cart.id }})">Переименовать</div>
+                <div><a href="#" onclick="duplicateList({{ cart.id }})">Дублировать</a></div>
+                <div><a href="#" onclick="deleteList({{ cart.id }})">Удалить</a></div>
+            </div>
+        </span>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 main-content">
+    {% if products %}
+    <table class="border-collapse border border-slate-400 w-full mt-6 table-auto shadow-md" id="cart_table">
+        <thead>
+        <tr class="odd:bg-white">
+            <th class="px-2 border border-slate-300 py-4">#</th>
+            <th class="px-2 border border-slate-300 py-4">Фото</th>
+            <th class="px-2 border border-slate-300 py-4">Магазин</th>
+            <th class="px-2 border border-slate-300 py-4">Ссылка</th>
+            <th class="px-2 border border-slate-300 py-4">Цвет</th>
+            <th class="px-2 border border-slate-300 py-4">Размер</th>
+            <th class="px-2 border border-slate-300 py-4">Количество</th>
+            <th class="px-2 border border-slate-300 py-4">Цена</th>
+            <th class="px-2 border border-slate-300 py-4">Стоимость</th>
+            <th class="px-2 border border-slate-300 py-4">Удалить</th>
+            <th class="px-2 border border-slate-300 py-4"><input type="checkbox" name="marker" value="mark_all"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+        <tr class="product_row even:bg-white odd:bg-slate-50" id="product_row_{{ product.id }}">
+            <td class="border py-2 px-2 border-slate-300 text-center">{{ forloop.counter }}</td>
+            <td class="border py-2 px-2 border-slate-300 text-center"><a href="{{ product.link }}" target="_blank"><img src="{{ product.img_url }}" style="width: 80px" class="inline" alt=""></a></td>
+            <td class="border py-2 px-2 border-slate-300 text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px;"><a target="_blank" href="{{ product.shop_home_page }}">{{ product.shop_home_page }}</a></td>
+            <td class="border py-2 px-2 border-slate-300 text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px;"><a target="_blank" href="{{ product.link }}">{{ product.link }}</a></td>
+            <td class="border py-2 px-2 border-slate-300 text-center">{{ product.color }}</td>
+            <td class="border py-2 px-2 border-slate-300 text-center">{{ product.size }}</td>
+            <td class="border py-2 px-2 border-slate-300 text-center" style="white-space: nowrap;">
+                <span class="change_amount_button" onclick="changeAmount(-1, {{ product.id }})">-</span>
+                <input class="amount_product" type="text" value="{{ product.amount }}">
+                <span class="change_amount_button" onclick="changeAmount(1, {{ product.id }})">+</span>
+            </td>
+            <td class="border py-2 px-2 border-slate-300 text-center"><span class="price">{{ product.price }}</span> ¥</td>
+            <td class="border py-2 px-2 border-slate-300 text-center"><span class="cost">{{ product.price|multiply:product.amount }}</span> ¥</td>
+            <td class="border py-2 px-2 border-slate-300 text-center leading-none">
+                <svg id="trash_img_{{ product.id }}" class="cursor-pointer delay-350 ease-in-out transition h-8 w-8 text-gray-200 hover:text-red-500 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="deleteProduct('{{ product.id }}')">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                <div style="display: none" id="cart_loader_{{ product.id }}" class="lds-ripple-small"><div></div><div></div></div>
+            </td>
+            <td class="border py-2 px-2 border-slate-300 text-center"><input type="checkbox" name="product" value="{{ product.id }}" data-cart-order="{{ product.cart_order }}"></td>
+        </tr>
+        {% endfor %}
+        <tr class="even:bg-white odd:bg-slate-50">
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"><span style="font-weight: bold;">Итого:</span></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"><span style="font-weight: bold;" id="total">0 ¥</span></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+            <td class="border py-2 px-2 border-slate-300 text-center py-4"></td>
+        </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+    <div id="empty_cart_block" style="margin: 20px 0;padding: 30px 60px;background-color: #fff;border-radius: 10px;{% if products %} display: none;{% endif %}">
+        <h1 style="font-size: 22px;font-weight: bold;">Чтобы добавить товары в корзину GET-BLANK:</h1>
+        <p style="padding-top: 20px">1. Установите <a href="https://chrome.google.com/webstore/detail/get-blank/eejkjiooncmfgejaiolpmlahgipmbecn?hl=ru" target="_blank">расширение для браузера: <span style="font-weight: bold; text-decoration: underline">установить <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="display: inline-block; height: 11px; vertical-align: baseline;"><path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z"></path></svg></span></a><br>
+            <span style="font-size: 13px; padding-left: 18px;">Расширение создаст кнопку "Добавить в корзину GET-BLANK" на страницах товаров китайских площадок</span><br>
+            <span style="font-size: 13px; padding-left: 18px;">Расширение доступно для всех браузеров на основе Chromium таких как: Google Chrome, Opera, Яндекс Браузер, Microsoft Edge и т.п.</span>
+        </p>
+        <p style="padding-top: 20px">2. Перейдите на страницу товара на одной из китайских площадок: <a href="https://1688.com" target="_blank" style="text-decoration: underline">1688.com</a>, <a href="https://taobao.com" target="_blank" style="text-decoration: underline">Taobao.com</a> или <a href="https://www.tmall.com/" target="_blank" style="text-decoration: underline">Tmall.com</a></p>
+        <p style="padding-top: 20px">3. Выберите нужный товар (цвет/размер/кол-во) и добавьте эти товары в корзину с помощью кнопки "В корзину GET-BLANK!"</p>
+    </div>
+
+    {% if products and blanks %}
+        {% if balance_enough %}
+        <p id="cart_info_text_not_enough" class="mt-6"><img src="{% static 'img/info.png' %}" alt="" style="display: inline-block; height: 26px; position: relative; top: -3px; margin-right: 6px;"> В бланке {{ total_items }} {{ total_items|form_of_position }}. При скачивании бланка со счета будет списано {{ total_cost }} руб.</p>
+        {% else %}
+        <p id="cart_info_text" class="mt-6"><img src="{% static 'img/info_red.png' %}" alt="" style="display: inline-block; height: 26px; position: relative; top: -3px; margin-right: 6px;"> В бланке {{ total_items }} {{ total_items|form_of_position }}. Для скачивания бланка необходимо {{ total_cost }} руб. (не хватает {{ total_cost|add:'-'|cut:'-'|add:user.balance }} руб.)</p>
+        {% endif %}
+    {% endif %}
+
+    {% if products and blanks and balance_enough %}
+    <form action="{% url 'download_filled' %}" method="post" id="get_blank_button" onsubmit="return downloadBlank();">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ user.id }}">
+        <input type="hidden" name="current_list_id" value="{{ current_cart.id }}">
+        <button class="px-16 py-2 mt-6 mr-6 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Скачать бланк</button>
+        <select name="file_blank_name" id="file_blank_name" class="inline-block rounded-md border-0 py-2 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            {% if blanks|length > 1 %}
+            <option value="0" disabled selected>Выберете бланк</option>
+            {% endif %}
+            {% for blank in blanks %}
+            <option value="{{ blank.blank_id }}">{{ blank.blank_filename_original }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    {% elif products and not blanks %}
+    <div id="get_blank_button_empty_blanks" class="inline-block px-16 py-2 my-4 mr-6 text-white bg-slate-400 rounded-lg text-slate-200">Скачать бланк</div>
+    <span id="add_first_blank"><img src="{% static 'img/info.png' %}" alt="" style="display: inline-block; height: 26px; position: relative; top: -3px; margin-right: 6px;"> Чтобы скачать, добавьте ваш бланк в разделе <a href="{% url 'blanks' %}" class="underline" style="font-weight:bold;">Мои бланки</a></span>
+    {% elif products and not balance_enough %}
+    <div id="get_blank_button_not_enough" class="inline-block px-16 py-2 my-4 mr-6 text-white bg-slate-400 rounded-lg text-slate-200">Скачать бланк</div>
+    {% endif %}
+</div>
+
+<div id="options_container">
+    <div id="deleteFromList" class="option" style="background-color: #d52727;">
+        <span>Удалить</span>
+    </div>
+    <div id="moveTo" class="option">
+        <span>Переместить</span>
+    </div>
+    <div id="moveUp" class="option" style="background-color: #ffdf54; color: #333;">
+        <span><i class="fa-solid fa-caret-up"></i></span>
+    </div>
+    <div id="moveDown" class="option" style="background-color: #ffdf54; color: #333;">
+        <span><i class="fa-solid fa-caret-down"></i></span>
+    </div>
+</div>
+
+<div id="move_container">
+    <p>Выберите список:</p>
+    <select name="destinationCartSelect" id="destinationCartSelect">
+        {% for cart in carts %}
+        <option value="{{ cart.id }}">{{ cart.name }}</option>
+        {% endfor %}
+    </select>
+    <div id="moveToExec" class="option" style="margin: 15px 0 0; text-align: center;">
+        <span>Переместить</span>
+    </div>
+</div>
+
+{% else %}
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 main-content" style="padding-top: 40px;">
+    <p>Корзина пуста. <a href="{% url 'blanks' %}">Добавьте бланк</a> чтобы начать.</p>
+</div>
+{% endif %}
