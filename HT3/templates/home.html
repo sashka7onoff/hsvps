@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block page_title %}Дашборд{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-stats card-success">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center"><i class="la la-check-circle"></i></div>
+                    </div>
+                    <div class="col-7 d-flex align-items-center">
+                        <div class="numbers">
+                            <p class="card-category">Привычек</p>
+                            <h4 class="card-title">{{ total_habits }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-stats card-primary">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center"><i class="la la-calendar-check-o"></i></div>
+                    </div>
+                    <div class="col-7 d-flex align-items-center">
+                        <div class="numbers">
+                            <p class="card-category">За неделю</p>
+                            <h4 class="card-title">{{ entries_this_week }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-stats card-warning">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center"><i class="la la-tasks"></i></div>
+                    </div>
+                    <div class="col-7 d-flex align-items-center">
+                        <div class="numbers">
+                            <p class="card-category">Задачи</p>
+                            <h4 class="card-title">{{ tasks_todo }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-stats card-danger">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center"><i class="la fa-spinner"></i></div>
+                    </div>
+                    <div class="col-7 d-flex align-items-center">
+                        <div class="numbers">
+                            <p class="card-category">В работе</p>
+                            <h4 class="card-title">{{ tasks_in_progress }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><h4 class="card-title">Прогресс задач</h4></div>
+            <div class="card-body">
+                <div id="task-complete" class="chart-circle mt-4 mb-3"></div>
+            </div>
+            <div class="card-footer"><div class="legend"><i class="la la-circle text-primary"></i> Выполнено</div></div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header"><h4 class="card-title">Статистика</h4><p class="card-category">Активные планы и выполненные задачи</p></div>
+            <div class="card-body">
+                <div class="progress-card">
+                    <div class="d-flex justify-content-between mb-1"><span class="text-muted">Активные планы</span><span class="text-muted fw-bold">{{ active_plans }}</span></div>
+                    <div class="progress mb-2" style="height: 7px;"><div class="progress-bar bg-success" role="progressbar" style="width: {% if active_plans %}100%{% else %}0%{% endif %}"></div></div>
+                </div>
+                <div class="progress-card">
+                    <div class="d-flex justify-content-between mb-1"><span class="text-muted">Выполнено задач</span><span class="text-muted fw-bold">{{ tasks_done }}</span></div>
+                    <div class="progress mb-2" style="height: 7px;"><div class="progress-bar bg-primary" role="progressbar" style="width: {% widthratio tasks_done tasks_done|add:tasks_todo|add:tasks_in_progress 100 %}%"></div></div>
+                </div>
+                <div class="progress-card">
+                    <div class="d-flex justify-content-between mb-1"><span class="text-muted">Записей привычек</span><span class="text-muted fw-bold">{{ entries_this_week }}</span></div>
+                    <div class="progress mb-2" style="height: 7px;"><div class="progress-bar bg-info" role="progressbar" style="width: {% widthratio entries_this_week total_habits|add:entries_this_week 100 %}%"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h4 class="card-title">Серии привычек</h4><p class="card-category">Топ-5 текущих серий</p></div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead><tr><th>Привычка</th><th class="text-right">Серия (дней)</th></tr></thead>
+                    <tbody>
+                        {% for item in streaks %}
+                        <tr><td>{{ item.habit.name }}</td><td class="text-right"><span class="badge badge-success">{{ item.streak }}</span></td></tr>
+                        {% empty %}
+                        <tr><td colspan="2" class="text-center">Нет данных</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h4 class="card-title">Быстрые ссылки</h4></div>
+            <div class="card-body">
+                <a href="{% url 'habit_list' %}" class="btn btn-success btn-full text-center mb-2"><i class="la la-plus"></i> Добавить привычку</a>
+                <a href="{% url 'task_list' %}" class="btn btn-primary btn-full text-center mb-2"><i class="la la-plus"></i> Создать задачу</a>
+                <a href="{% url 'note_list' %}" class="btn btn-info btn-full text-center"><i class="la la-plus"></i> Новая заметка</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    var completed = {{ tasks_done }};
+    var total = {{ tasks_done|add:tasks_todo|add:tasks_in_progress }};
+    var percent = total > 0 ? Math.round(completed / total * 100) : 0;
+    Circles.create({
+        id: 'task-complete',
+        percentage: percent,
+        value: percent,
+        maxValue: 100,
+        radius: 80,
+        width: 10,
+        text: function(value) { return value + '%'; },
+        colors: ['#E2E2E2', '#1572E8'],
+        duration: 1000
+    });
+});
+</script>
+{% endblock %}

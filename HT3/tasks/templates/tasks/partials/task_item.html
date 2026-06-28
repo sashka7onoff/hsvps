@@ -1,0 +1,51 @@
+{% load task_tags %}
+{% with subtasks=task.subtasks.all %}
+<div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition" data-task-id="{{ task.id }}">
+    <div class="flex flex-col sm:flex-row justify-between items-start gap-3">
+        <div class="flex-1">
+            <div class="flex items-center gap-3">
+                {% if subtasks %}
+                <button onclick="toggleSubtasks({{ task.id }})" class="text-gray-400 hover:text-gray-600 transition-transform" id="arrow-{{ task.id }}">
+                    &#9654;
+                </button>
+                {% endif %}
+                <a href="{% url 'task_edit' task.id %}" class="font-semibold text-gray-800 hover:text-blue-600">
+                    {{ task.title }}
+                </a>
+            </div>
+            {% if task.description %}
+            <p class="text-sm text-gray-500 mt-1">{{ task.description|truncatechars:100 }}</p>
+            {% endif %}
+            <div class="flex gap-2 mt-2 items-center flex-wrap">
+                <span class="status-badge px-2 py-1 rounded text-xs font-medium cursor-pointer transition {{ task.status|get_status_color }}" data-status="{{ task.status }}" onclick="toggleStatus({{ task.id }})">
+                    {{ task.get_status_display }}
+                </span>
+                <span class="text-xs text-gray-400">Приоритет: {{ task.priority }}</span>
+                {% with task_plans=task.plans.all %}
+                {% if task_plans %}
+                    {% for plan in task_plans %}
+                    <span class="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded">{{ plan.name }}</span>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="flex gap-2 sm:ml-4">
+            <a href="{% url 'task_edit' task.id %}" class="text-sm text-blue-600 hover:text-blue-800">Изменить</a>
+            {% if plan_id %}
+            <button onclick="removeTaskFromPlan({{ task.id }})" class="text-sm text-orange-600 hover:text-orange-800">Убрать</button>
+            {% else %}
+            <button onclick="deleteTask({{ task.id }})" class="text-sm text-red-600 hover:text-red-800">Удалить</button>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if subtasks %}
+    <div id="subtasks-{{ task.id }}" class="hidden mt-3 pl-4 border-l-2 border-gray-200 space-y-2">
+        {% for subtask in subtasks %}
+            {% include "tasks/partials/task_item.html" with task=subtask level=level|default:0|add:2 plan_id=plan_id %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endwith %}

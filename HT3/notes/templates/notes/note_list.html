@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Заметки{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Заметки</h1>
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'subcategory_create' %}" class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-2 rounded-lg transition text-sm">+ Подкатегория</a>
+            <a href="{% url 'category_create' %}" class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-2 rounded-lg transition text-sm">+ Категория</a>
+            <a href="{% url 'note_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition">+ Заметка</a>
+        </div>
+    </div>
+
+    <div class="flex gap-2 mb-4">
+        {% for cat in categories %}
+        <a href="?category={{ cat.id }}" class="px-3 py-1 rounded-full text-sm text-white transition hover:opacity-80" style="background-color:{{ cat.color }}">
+            {{ cat.name }} ({{ cat.note_count }})
+        </a>
+        {% empty %}
+        <span class="text-sm text-gray-400">Нет категорий</span>
+        {% endfor %}
+    </div>
+
+    {% if subcategories %}
+    <div class="flex gap-2 mb-4">
+        {% for sub in subcategories %}
+        <a href="?category={{ current_category.id }}&subcategory={{ sub.id }}" class="px-3 py-1 rounded-full text-sm border border-gray-300 {% if current_subcategory and current_subcategory.id == sub.id %}bg-gray-800 text-white border-gray-800{% else %}text-gray-600 hover:bg-gray-100{% endif %} transition">
+            {{ sub.name }} ({{ sub.note_count }})
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="mb-4">
+        <input type="text" id="searchInput" placeholder="Поиск..." value="{{ search|default:'' }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg" oninput="searchNotes()">
+    </div>
+
+    {% if notes %}
+    <div id="notesList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for note in notes %}
+        <a href="{% url 'note_detail' note.id %}" class="note-card bg-white rounded-xl shadow p-5 hover:shadow-md transition block">
+            <div class="flex items-start justify-between mb-3">
+                <h3 class="font-semibold text-gray-800 line-clamp-2 flex-1">{{ note.title }}</h3>
+                <div class="ml-2 flex-shrink-0">
+                    {% if note.category %}
+                    <span class="text-xs px-2 py-0.5 rounded text-white" style="background-color:{{ note.category.color }}">{{ note.category.name }}</span>
+                    {% endif %}
+                    {% if note.subcategory %}
+                    <span class="text-xs px-2 py-0.5 rounded bg-gray-200 text-gray-600 ml-1">{{ note.subcategory.name }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% if note.description %}
+            <p class="text-sm text-gray-500 line-clamp-3 mb-2">{{ note.description }}</p>
+            {% endif %}
+            {% if note.url %}
+            <div class="text-sm text-blue-500 truncate">{{ note.url }}</div>
+            {% endif %}
+            <div class="text-xs text-gray-400 mt-3">{{ note.created_at|date:"d.m.Y" }}</div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-12 bg-white rounded-xl shadow">
+        <p class="text-gray-500 text-lg">Нет заметок</p>
+        <a href="{% url 'note_create' %}" class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">Создать первую заметку</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function searchNotes() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.note-card');
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? '' : 'none';
+    });
+}
+
+if (document.getElementById('searchInput').value) {
+    searchNotes();
+}
+</script>
+{% endblock %}

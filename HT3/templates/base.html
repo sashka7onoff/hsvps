@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Habit Tracker{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ready/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{% static 'ready/css/ready.css' %}">
+    <link rel="stylesheet" href="{% static 'ready/css/demo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar .nav .nav-item.active a {
+            background: rgba(0, 0, 0, 0.03);
+            color: #575962;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="main-header">
+            <div class="logo-header">
+                <a href="{% url 'home' %}" class="logo">Habit Tracker</a>
+                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
+            </div>
+            <nav class="navbar navbar-header navbar-expand-lg">
+                <div class="container-fluid">
+                    {% if user.is_authenticated %}
+                    <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                        <li class="nav-item dropdown hidden-caret">
+                            <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="la la-bell"></i>
+                                <span class="notification">3</span>
+                            </a>
+                            <ul class="dropdown-menu notif-box" aria-labelledby="notifDropdown">
+                                <li><div class="dropdown-title">Уведомления</div></li>
+                                <li><div class="notif-center"><a href="#"><div class="notif-icon notif-primary"><i class="la la-check-circle"></i></div><div class="notif-content"><span class="block">Новая привычка создана</span><span class="time">5 минут назад</span></div></a></div></li>
+                                <li><a class="see-all" href="javascript:void(0);"><strong>Все уведомления</strong> <i class="la la-angle-right"></i></a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+                                <span>{{ user.username }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><div class="user-box"><div class="u-text"><h4>{{ user.username }}</h4><p class="text-muted">{{ user.email }}</p></div></li>
+                                <div class="dropdown-divider"></div>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item"><i class="fa fa-power-off"></i> Выйти</button>
+                                </form>
+                            </ul>
+                        </li>
+                    </ul>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+        <div class="sidebar">
+            <div class="scrollbar-inner sidebar-wrapper">
+                {% if user.is_authenticated %}
+                <div class="user">
+                    <div class="info">
+                        <a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+                            <span>{{ user.username }}<span class="user-level">Пользователь</span><span class="caret"></span></span>
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                <ul class="nav">
+                    <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                        <a href="{% url 'home' %}"><i class="la la-dashboard"></i><p>Дашборд</p></a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'habit_list' %}active{% endif %}">
+                        <a href="{% url 'habit_list' %}"><i class="la la-check-circle"></i><p>Привычки</p></a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'task_list' %}active{% endif %}">
+                        <a href="{% url 'task_list' %}"><i class="la la-tasks"></i><p>Задачи</p></a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'note_list' %}active{% endif %}">
+                        <a href="{% url 'note_list' %}"><i class="la la-file-text"></i><p>Заметки</p></a>
+                    </li>
+                    {% if not user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}"><i class="la la-sign-in"></i><p>Войти</p></a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <div class="content">
+                <div class="container-fluid">
+                    {% if messages %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <h4 class="page-title">{% block page_title %}{% endblock %}</h4>
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'ready/js/core/jquery.3.2.1.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'ready/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'ready/js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/chartist/chartist.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/jquery-mapael/jquery.mapael.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/jquery-mapael/maps/world_countries.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/chart-circle/circles.min.js' %}"></script>
+    <script src="{% static 'ready/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+    <script src="{% static 'ready/js/ready.min.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
