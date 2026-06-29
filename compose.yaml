@@ -63,7 +63,7 @@ services:
   web3:
     build: ./alex-crm
     volumes:
-      - alex_crm_volum:/var/www/html
+      - alex_crm_volume:/var/www/html
 
   nginx:
     image: nginx:latest
@@ -76,7 +76,7 @@ services:
       - media_volume2:/app2/media
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - alex_crm_volum:/var/www/html
+      - alex_crm_volume:/var/www/html
     depends_on:
       - web
       - web2
@@ -87,3 +87,4 @@ volumes:
   static_volume:
   static_volume2:
   media_volume2:
+  alex_crm_volume:
