@@ -2,6 +2,7 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from main.models import Product, Cart
 
 
@@ -63,3 +64,13 @@ def add_product(request):
 
         return JsonResponse({'status': 'ok'})
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+def me(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'authenticated': False}, status=401)
+    return JsonResponse({
+        'authenticated': True,
+        'id': request.user.id,
+        'login': request.user.login,
+    })
