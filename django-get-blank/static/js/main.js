@@ -420,4 +420,20 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('file_blank_name').style.border = "none"
         })
     }
+
+    const userButton = document.getElementById('user_button');
+    const profileMenu = document.getElementById('profile_menu');
+    if (userButton && profileMenu) {
+        userButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isHidden = profileMenu.style.display === 'none';
+            profileMenu.style.display = isHidden ? 'block' : 'none';
+        });
+        document.addEventListener('click', function () {
+            profileMenu.style.display = 'none';
+        });
+        profileMenu.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    }
 });
