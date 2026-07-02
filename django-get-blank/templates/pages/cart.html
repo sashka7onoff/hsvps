@@ -1,7 +1,6 @@
 {% load static %}
 {% load blank_tags %}
 
-{% if current_cart %}
 <div id="transporetn_bg">
     <div id="new_name_modal">
         <span id="close_new_name_modal" onclick="closeNewNameModal()">
@@ -121,7 +120,8 @@
     </table>
     {% endif %}
 
-    <div id="empty_cart_block" style="margin: 20px 0;padding: 30px 60px;background-color: #fff;border-radius: 10px;{% if products %} display: none;{% endif %}">
+    {% if not carts %}
+    <div id="empty_cart_block" style="margin: 20px 0;padding: 30px 60px;background-color: #fff;border-radius: 10px;">
         <h1 style="font-size: 22px;font-weight: bold;">Чтобы добавить товары в корзину GET-BLANK:</h1>
         <p style="padding-top: 20px">1. Установите <a href="https://chrome.google.com/webstore/detail/get-blank/eejkjiooncmfgejaiolpmlahgipmbecn?hl=ru" target="_blank">расширение для браузера: <span style="font-weight: bold; text-decoration: underline">установить <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="display: inline-block; height: 11px; vertical-align: baseline;"><path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z"></path></svg></span></a><br>
             <span style="font-size: 13px; padding-left: 18px;">Расширение создаст кнопку "Добавить в корзину GET-BLANK" на страницах товаров китайских площадок</span><br>
@@ -130,6 +130,7 @@
         <p style="padding-top: 20px">2. Перейдите на страницу товара на одной из китайских площадок: <a href="https://1688.com" target="_blank" style="text-decoration: underline">1688.com</a>, <a href="https://taobao.com" target="_blank" style="text-decoration: underline">Taobao.com</a> или <a href="https://www.tmall.com/" target="_blank" style="text-decoration: underline">Tmall.com</a></p>
         <p style="padding-top: 20px">3. Выберите нужный товар (цвет/размер/кол-во) и добавьте эти товары в корзину с помощью кнопки "В корзину GET-BLANK!"</p>
     </div>
+    {% endif %}
 
     {% if products and blanks %}
         {% if balance_enough %}
@@ -188,9 +189,3 @@
         <span>Переместить</span>
     </div>
 </div>
-
-{% else %}
-<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 main-content" style="padding-top: 40px;">
-    <p>Корзина пуста. <a href="{% url 'blanks' %}">Добавьте бланк</a> чтобы начать.</p>
-</div>
-{% endif %}
