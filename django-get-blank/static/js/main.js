@@ -397,6 +397,7 @@ document.addEventListener('DOMContentLoaded', function () {
         addNewList.addEventListener('click', function () {
             document.getElementById('transporetn_bg').style.display = "flex";
             document.getElementById('new_name_modal').style.display = "block";
+            document.getElementById('new_list_name_input').focus();
         });
     }
 
