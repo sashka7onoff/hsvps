@@ -54,7 +54,6 @@ services:
 
     volumes:
       - static_volume:/app/staticfiles
-      - ./HT3:/app
 #    ports:
 #      - 8000:8000
     depends_on:
