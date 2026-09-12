@@ -3,7 +3,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', os.getenv('FOOD_SECRET_KEY', 'django-insecure--CHANGE-ME-IN-PRODUCTION--replace-with-secure-key!!'))
 DEBUG = os.getenv('DEBUG', '1') == '1'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,habits-app.ru,www.habits-app.ru,habits-app.ru.local').split(',')
+ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,7 +54,7 @@ CORS_ALLOW_CREDENTIALS = True
 # Proxy / CSRF for nginx
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://habits-app.ru,https://www.habits-app.ru,http://habits-app.ru.local,http://localhost:8002,http://localhost:5173').split(',')
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_HOST = False
 # Shared session with HT3
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_NAME = "sessionid"

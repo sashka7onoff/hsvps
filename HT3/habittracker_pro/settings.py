@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure--CHANGE-ME-IN-PRODU
 
 DEBUG = os.getenv('DEBUG', '1') == '1' if os.getenv('DJANGO_SECRET_KEY') else True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '195.209.213.245', 'habits-app.ru', 'www.habits-app.ru', 'habits-app.ru.local']
+ALLOWED_HOSTS = ['*']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = ['https://habits-app.ru', 'https://www.habits-app.ru']
