@@ -28,6 +28,20 @@ services:
       timeout: 5s
       retries: 5
 
+  db_food:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${FOOD_DB_NAME:-food_tracker}
+      POSTGRES_USER: ${FOOD_DB_USER:-food_user}
+      POSTGRES_PASSWORD: ${FOOD_DB_PASSWORD:-food_password}
+    volumes:
+      - pg_data_food:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${FOOD_DB_USER:-food_user} -d ${FOOD_DB_NAME:-food_tracker}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   web:
     build: ./HT3
 
@@ -65,6 +79,29 @@ services:
     volumes:
       - alex_crm_volume:/var/www/html
 
+  food-tracker:
+    build:
+      context: ./food-tracker
+      dockerfile: ./backend/Dockerfile
+    environment:
+      FOOD_DB_NAME: ${FOOD_DB_NAME:-food_tracker}
+      FOOD_DB_USER: ${FOOD_DB_USER:-food_user}
+      FOOD_DB_PASSWORD: ${FOOD_DB_PASSWORD:-food_password}
+      FOOD_DB_HOST: db_food
+      FOOD_DB_PORT: "5432"
+      DJANGO_SECRET_KEY: ${FOOD_SECRET_KEY:-dev-secret-key-change-in-prod}
+      DEBUG: "0"
+      ALLOWED_HOSTS: "habits-app.ru,www.habits-app.ru,localhost,127.0.0.1,food-tracker"
+      CSRF_TRUSTED_ORIGINS: "https://habits-app.ru,https://www.habits-app.ru"
+      CORS_ALLOWED_ORIGINS: "https://habits-app.ru,https://www.habits-app.ru,http://habits-app.ru.local"
+    volumes:
+      - food_static:/app/staticfiles
+      - food_tracker_dist:/usr/share/nginx/food-tracker
+    depends_on:
+      db_food:
+        condition: service_healthy
+    restart: unless-stopped
+
   nginx:
     image: nginx:latest
     ports:
@@ -74,17 +111,23 @@ services:
       - static_volume:/app/staticfiles
       - static_volume2:/app2/staticfiles
       - media_volume2:/app2/media
+      - food_static:/app3/staticfiles
+      - food_tracker_dist:/usr/share/nginx/food-tracker:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - alex_crm_volume:/var/www/html
     depends_on:
       - web
       - web2
+      - food-tracker
 
 volumes:
   pg_data:
   pg_data2:
+  pg_data_food:
   static_volume:
   static_volume2:
   media_volume2:
+  food_static:
+  food_tracker_dist:
   alex_crm_volume:
