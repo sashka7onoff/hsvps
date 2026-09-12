@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 dist/
+!food-tracker/frontend/dist/
+!food-tracker/frontend/dist/**
 build/
 *.egg
 .python-version
@@ -22,7 +24,7 @@ venv/
 env/
 ENV/
 venv.bak/
-Lib/
+/Lib/
 Scripts/
 include/
 pyvenv.cfg
