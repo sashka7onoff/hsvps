@@ -7,14 +7,16 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointE
 
 export default function Stats(){
   const [entries,setEntries]=useState([])
-  const [source,setSource]=useState('sqlite')
+  const [source,setSource]=useState('')
+  const [needLogin,setNeedLogin]=useState(false)
   useEffect(()=>{
     (async()=>{
       try{
         const res=await apiFetch('/api/food-tracker/entries/?period=month')
-        if(res.ok){ const d=await res.json(); const list=Array.isArray(d)?d:(d.results||[]); setEntries(list); setSource('sqlite'); return}
-        throw new Error('fallback')
-      }catch{ setEntries(JSON.parse(localStorage.getItem('ft_entries')||'[]')); setSource('локально') }
+        if(res.ok){ const d=await res.json(); const list=Array.isArray(d)?d:(d.results||[]); setEntries(list); setSource(''); setNeedLogin(false); return}
+        if(res.status===401 || res.status===403){ setNeedLogin(true); return }
+        throw new Error('error')
+      }catch{ setNeedLogin(true) }
     })()
   },[])
   const planned=entries.filter(e=>e.is_planned).length
@@ -25,10 +27,17 @@ export default function Stats(){
   // топ триггеры
   const triggers = Object.entries(entries.flatMap(e=>e.reasons||[]).reduce((acc,r)=>{acc[r]=(acc[r]||0)+1;return acc},{})).sort((a,b)=>b[1]-a[1]).slice(0,3)
 
+  if(needLogin) return (
+    <div className="max-w-md mx-auto p-8 text-center space-y-4">
+      <h2 className="font-serif text-xl">Требуется вход</h2>
+      <p className="text-sm text-muted-foreground">Войди в аккаунт, чтобы видеть статистику</p>
+      <a href={"/accounts/login/?next="+encodeURIComponent('/food-tracker/stats')} className="btn-primary inline-block">Войти</a>
+    </div>
+  )
   return (
     <div className="max-w-md mx-auto p-4 space-y-4">
       <h2 className="font-serif text-xl">Статистика</h2>
-      <p className="text-xs text-muted-foreground">Источник: {source}</p>
+      {source && <p className="text-xs text-muted-foreground">Источник: {source}</p>}
       <div className="grid grid-cols-2 gap-3">
         <div className="card !py-3"><div className="text-2xl font-serif font-bold">{entries.length}</div><div className="text-xs text-muted-foreground">всего приёмов</div></div>
         <div className="card !py-3"><div className="text-2xl font-serif font-bold text-destructive">{bad}</div><div className="text-xs text-muted-foreground">оценок “плохо”</div></div>
@@ -60,7 +69,7 @@ export default function Stats(){
         <div className="font-semibold">Стрик</div>
         <div className="text-sm text-muted-foreground">{bad===0 && entries.length>0 ? 'Дней без «плохо» — держишься!' : 'Собери 3 дня без внеплановых — начни сегодня'}</div>
       </div>
-      <p className="text-xs text-center text-muted-foreground">Графики строятся из SQLite (если залогинен) или локально. Фильтры — сегодня/неделя/месяц.</p>
+      <p className="text-xs text-center text-muted-foreground">Требуется вход. Данные хранятся в общей БД.</p>
     </div>
   )
 }

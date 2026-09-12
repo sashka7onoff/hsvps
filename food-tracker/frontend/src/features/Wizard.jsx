@@ -45,18 +45,14 @@ export default function Wizard(){
     try {
       const res = await apiFetch('/api/food-tracker/entries/', { method:'POST', body: JSON.stringify(payload) })
       if (res.ok) {
-        setMsg('Сохранено в SQLite ✓')
+        setMsg('Сохранено ✓')
         setStep(0)
         setForm({ reasons:[], hunger_level:null, meal_type:'', is_planned:true, portion:'moderate', junk_items:[], positive_items:[], rating:'normal', note:'', eaten_at: new Date().toISOString().slice(0,16) })
         return
       }
       if (res.status===403 || res.status===401) {
-        // fallback localStorage если не залогинен
-        const data = JSON.parse(localStorage.getItem('ft_entries')||'[]')
-        data.unshift({id:Date.now(), ...form})
-        localStorage.setItem('ft_entries', JSON.stringify(data))
-        setMsg('Сохранено локально (войди в /admin/, чтобы писать в SQLite)')
-        setStep(0)
+        setMsg('Войди в аккаунт, чтобы сохранить')
+        setTimeout(()=>{ window.location.href='/accounts/login/?next='+encodeURIComponent('/food-tracker/add') }, 800)
         return
       }
       const err = await res.text()
@@ -157,9 +153,9 @@ export default function Wizard(){
       {msg && <p className="text-sm text-center p-2 bg-muted rounded-sm">{msg}</p>}
       <div className="flex gap-2 pt-2">
         {step>0 && <button onClick={back} className="btn-secondary flex-1">Назад</button>}
-        {step<total-1 ? <button onClick={next} className="btn-primary flex-1 bg-primary">Далее</button> : <button onClick={save} disabled={saving} className="btn-primary flex-1 !bg-accent disabled:opacity-50">{saving?'Сохранение...':'Сохранить в SQLite'}</button>}
+        {step<total-1 ? <button onClick={next} className="btn-primary flex-1 bg-primary">Далее</button> : <button onClick={save} disabled={saving} className="btn-primary flex-1 !bg-accent disabled:opacity-50">{saving?'Сохранение...':'Добавить'}</button>}
       </div>
-      <p className="text-xs text-center text-muted-foreground">Данные пишутся в SQLite (если залогинен) или локально. Время можно править.</p>
+      <p className="text-xs text-center text-muted-foreground">Требуется вход в аккаунт. Время можно править.</p>
     </div>
   )
 }

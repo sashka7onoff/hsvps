@@ -15,9 +15,9 @@ load_dotenv(Path(__file__).resolve().parent.parent.parent / '.env')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure--CHANGE-ME-IN-PRODUCTION--replace-with-secure-key!!'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure--CHANGE-ME-IN-PRODUCTION--replace-with-secure-key!!')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', '1') == '1' if os.getenv('DJANGO_SECRET_KEY') else True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '195.209.213.245', 'habits-app.ru', 'www.habits-app.ru', 'habits-app.ru.local']
 
@@ -126,5 +126,9 @@ LOGOUT_REDIRECT_URL = 'login'
 
 DRF_DEFAULT_PERMISSIONS = ['rest_framework.permissions.IsAuthenticated']
 
-SESSION_ENGINE = "django.contrib.sessions.backends.file"
-SESSION_FILE_PATH = BASE_DIR / "sessions"
+# Shared DB sessions with food-tracker (same DB, same SECRET_KEY)
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_NAME = "sessionid"
+SESSION_COOKIE_DOMAIN = None
+SESSION_COOKIE_AGE = 1209600
+CSRF_COOKIE_NAME = "csrftoken"

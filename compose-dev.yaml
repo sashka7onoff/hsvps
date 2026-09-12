@@ -11,6 +11,12 @@
     volumes:
       - pg_data:/var/lib/postgresql/data
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   db2:
     image: postgres:16
 
@@ -51,6 +57,8 @@
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: db
       DB_PORT: "5432"
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-django-insecure--CHANGE-ME-IN-PRODUCTION--replace-with-secure-key!!}
+      DEBUG: "1"
 
     volumes:
       - static_volume:/app/staticfiles
@@ -60,7 +68,8 @@
       - "8000:8000"
 
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   web2:
     build: ./django-get-blank
@@ -81,12 +90,16 @@
       context: ./food-tracker
       dockerfile: ./backend/Dockerfile
     environment:
-      FOOD_DB_NAME: ${FOOD_DB_NAME:-food_tracker}
-      FOOD_DB_USER: ${FOOD_DB_USER:-food_user}
-      FOOD_DB_PASSWORD: ${FOOD_DB_PASSWORD:-food_password}
-      FOOD_DB_HOST: db_food
+      FOOD_DB_NAME: ${DB_NAME}
+      FOOD_DB_USER: ${DB_USER}
+      FOOD_DB_PASSWORD: ${DB_PASSWORD}
+      FOOD_DB_HOST: db
       FOOD_DB_PORT: "5432"
-      DJANGO_SECRET_KEY: ${FOOD_SECRET_KEY:-dev-secret-key-change-in-prod}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-django-insecure--CHANGE-ME-IN-PRODUCTION--replace-with-secure-key!!}
       DEBUG: "1"
       ALLOWED_HOSTS: "habits-app.ru,www.habits-app.ru,habits-app.ru.local,localhost,127.0.0.1,food-tracker"
       CSRF_TRUSTED_ORIGINS: "http://habits-app.ru.local,http://localhost:8002,http://localhost:5173,https://habits-app.ru"
@@ -99,7 +112,7 @@
     ports:
       - "8002:8000"
     depends_on:
-      db_food:
+      db:
         condition: service_healthy
 
   food-tracker-frontend:

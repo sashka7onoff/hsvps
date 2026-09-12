@@ -4,39 +4,39 @@ import { mealTypeLabel, portionLabel, ratingLabel, reasonLabel, junkLabel, posit
 export default function History(){
   const [period,setPeriod]=useState('today')
   const [entries,setEntries]=useState([])
-  const [source,setSource]=useState('sqlite')
+  const [source,setSource]=useState('')
+  const [needLogin,setNeedLogin]=useState(false)
   const fetchEntries = async (p)=>{
     try{
       const res = await apiFetch(`/api/food-tracker/entries/?period=${p}`)
-      if(res.ok){ const data=await res.json(); // DRF paginated? handle both
+      if(res.ok){ const data=await res.json();
         const list = Array.isArray(data) ? data : (data.results || [])
-        setEntries(list); setSource('sqlite'); return
+        setEntries(list); setSource(''); setNeedLogin(false); return
       }
-      throw new Error('fallback')
+      if(res.status===401 || res.status===403){ setNeedLogin(true); setEntries([]); return }
+      throw new Error('error')
     }catch{
-      // fallback localStorage
-      const data=JSON.parse(localStorage.getItem('ft_entries')||'[]')
-      const now=new Date()
-      let filtered=data
-      if(p==='today') filtered=data.filter(e=> new Date(e.eaten_at).toDateString()===now.toDateString())
-      else if(p==='week') filtered=data.filter(e=> (now - new Date(e.eaten_at)) < 7*864e5)
-      else if(p==='month') filtered=data.filter(e=> (now - new Date(e.eaten_at)) < 30*864e5)
-      setEntries(filtered); setSource('локально')
+      setNeedLogin(true); setEntries([])
     }
   }
   useEffect(()=>{ fetchEntries(period) },[period])
   const del= async (id)=>{
-    try{
-      const res = await apiFetch(`/api/food-tracker/entries/${id}/`, {method:'DELETE'})
-      if(res.ok){ setEntries(e=>e.filter(x=>x.id!==id)); return }
-      if(res.status===403||res.status===401) throw new Error('local')
-    }catch{}
-    const d=JSON.parse(localStorage.getItem('ft_entries')||'[]').filter(e=>e.id!==id); localStorage.setItem('ft_entries',JSON.stringify(d)); setEntries(e=>e.filter(x=>x.id!==id))
+    const res = await apiFetch(`/api/food-tracker/entries/${id}/`, {method:'DELETE'})
+    if(res.ok){ setEntries(e=>e.filter(x=>x.id!==id)); return }
+    if(res.status===401 || res.status===403){ window.location.href='/accounts/login/?next='+encodeURIComponent('/food-tracker/history'); return }
+    setEntries(e=>e.filter(x=>x.id!==id))
   }
+  if(needLogin) return (
+    <div className="max-w-md mx-auto p-8 text-center space-y-4">
+      <h2 className="font-serif text-xl">Требуется вход</h2>
+      <p className="text-sm text-muted-foreground">Войди в аккаунт habits-app.ru, чтобы видеть историю</p>
+      <a href={"/accounts/login/?next="+encodeURIComponent('/food-tracker/history')} className="btn-primary inline-block">Войти</a>
+    </div>
+  )
   return (
     <div className="max-w-md mx-auto p-4 space-y-4">
       <h2 className="font-serif text-xl">История</h2>
-      <p className="text-xs text-muted-foreground">Источник: {source} • {source==='локально' && 'войди в /admin/ для SQLite'}</p>
+      {source && <p className="text-xs text-muted-foreground">Источник: {source}</p>}
       <div className="flex gap-2 p-1 bg-muted rounded-full w-fit">
         {['today','week','month'].map(p=>(
           <button key={p} onClick={()=>setPeriod(p)} className={`px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors ${period===p?'bg-primary text-white':'text-muted-foreground'}`}>{p==='today'?'Сегодня':p==='week'?'Неделя':'Месяц'}</button>
